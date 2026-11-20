@@ -51,12 +51,15 @@ private:
 };
 
 // What the driver asks the car to do
-struct CarInput
+struct CarInput // Using this so called Lerp I think
 {
 	float throttle; // 0 .. 1
 	float brake; // 0 .. 1 (reverse when the car is almost stopped)
 	float steer; // -1 (left) .. 1 (right)
 	bool handbrake;
+
+	bool Nitro; // 0 - 1, use the handbrake to recharge Nitro [Maybe???]
+	float NitroCharge;
 };
 
 // Car tuning. Accelerations are per unit of mass (m/s^2), so they do not depend on the mass of the car

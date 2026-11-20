@@ -133,13 +133,26 @@ void Car::ApplyForces(ModulePhysics* physics, const Track& track)
 	b2Vec2 right(-heading.y, heading.x);
 
 	b2Vec2 velocity = b->GetLinearVelocity();
-	float forward_speed = b2Dot(velocity, heading);
+	float forward_speed = b2Dot(velocity, heading) * 1;
 	float side_speed = b2Dot(velocity, right);
-	float speed = velocity.Length();
+	float speed;
+	// --NITRO!--------------------- (???)
+	if (input.handbrake)
+	{
+		speed = velocity.Length();
+	}
+	else
+	{
+		speed = (IsKeyDown(KEY_LEFT_SHIFT)) ? velocity.Length() * -0.1f: velocity.Length(); //------Nitro
+	}
+	
 
 	// 1. Engine and brakes. A tyre can not push more than the friction allows: mu_s * g (ice: almost nothing)
 	float max_accel = floor.static_friction * GRAVITY_Z;
+
+	
 	float accel = CAR_ENGINE_ACCEL * input.throttle;
+	
 
 	if (input.brake > 0.0f)
 	{
@@ -203,6 +216,7 @@ void Car::ApplyForces(ModulePhysics* physics, const Track& track)
 	{
 		physics->ApplyAngularFriction(body, floor.static_friction, floor.dynamic_friction, PIXEL_TO_METERS(CAR_HALF_LENGTH));
 	}
+
 }
 
 void Car::Draw() const
@@ -212,7 +226,7 @@ void Car::Draw() const
 	float angle = GetAngle();
 
 	Rectangle body_rect = { p.x, p.y, (float)(CAR_HALF_LENGTH * 2), (float)(CAR_HALF_WIDTH * 2) };
-	DrawRectanglePro(body_rect, Vector2{ (float)CAR_HALF_LENGTH, (float)CAR_HALF_WIDTH }, angle * RAD2DEG, sliding ? ORANGE : RED);
+	DrawRectanglePro(body_rect, Vector2{ (float)CAR_HALF_LENGTH, (float)CAR_HALF_WIDTH }, angle * RAD2DEG, sliding ? ORANGE : VIOLET);
 
 	Rectangle front_rect = { p.x + cosf(angle) * 14.0f, p.y + sinf(angle) * 14.0f, 10.0f, (float)(CAR_HALF_WIDTH * 2 - 6) };
 	DrawRectanglePro(front_rect, Vector2{ 5.0f, (float)(CAR_HALF_WIDTH - 3) }, angle * RAD2DEG, DARKGRAY);

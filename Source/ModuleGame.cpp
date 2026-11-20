@@ -29,6 +29,7 @@ bool ModuleGame::Start()
 	// The physics calls OnPhysicsStep before every step of the world
 	App->physics->SetStepListener(this);
 
+
 	BuildWorld();
 	ResetWorld();
 
@@ -138,6 +139,8 @@ void ModuleGame::UpdatePlayerInput()
 	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) input.steer += 1.0f;
 	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) input.steer -= 1.0f;
 	input.handbrake = IsKeyDown(KEY_SPACE);
+
+	input.Nitro = IsKeyDown(KEY_LEFT_SHIFT);
 
 	car->input = input;
 }
